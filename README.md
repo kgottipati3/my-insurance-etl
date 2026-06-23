@@ -19,7 +19,7 @@ This project was engineered with a strict focus on data integrity, decoupled arc
 * **Testing:** Pytest (with session-scoped Fixtures & Mocking)
 
 ---
-1. Local Setup & Installation
+1. Local Setup & Installation 
 Prerequisites:
 Docker Desktop installed and running.
 Git installed.
@@ -27,7 +27,7 @@ Git installed.
 Installation
 Clone the repository and build the isolated Docker containers. The docker-compose.yaml file defines both the Python ETL environment and the PostgreSQL database.
 
-git clone <your-repository-url>
+git clone https://github.com/kgottipati3/my-insurance-etl.git
 cd my-insurance-etl
 # Build the ETL Pipeline Docker image
 docker-compose build etl_pipeline
