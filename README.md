@@ -33,9 +33,9 @@ cd my-insurance-etl
 docker-compose build etl_pipeline
 
 2. Running the Pipeline
-    Booting the Infrastructure
-        First, spin up the PostgreSQL database container in detached mode. This container holds your tables, and schemas.
-        docker-compose up -d enterprise_pg_db
+   Booting the Infrastructure
+   First, spin up the PostgreSQL database container in detached mode. This container holds your tables, and schemas.
+   docker-compose up -d enterprise_pg_db
     Executing the Data Loads
     Run the orchestrator script for patient, provider and claim
         docker-compose run --rm etl_pipeline python src/main.py --source_name "patient" --folder_path "data/patient" --target_table "public.patient" --pk_field "patient_id" --cdc_field "last_modified_date"
