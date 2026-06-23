@@ -31,29 +31,18 @@ git clone <your-repository-url>
 cd my-insurance-etl
 # Build the ETL Pipeline Docker image
 docker-compose build etl_pipeline
+## 2. Running the Pipeline
 
-2. Running the Pipeline
-   Booting the Infrastructure
-   First, spin up the PostgreSQL database container in detached mode. This container holds your tables, and schemas.
-   docker-compose up -d enterprise_pg_db
-    Executing the Data Loads
-    Run the orchestrator script for patient, provider and claim
-        docker-compose run --rm etl_pipeline python src/main.py --source_name "patient" --folder_path "data/patient" --target_table "public.patient" --pk_field "patient_id" --cdc_field "last_modified_date"
-        docker-compose run --rm etl_pipeline python src/main.py --source_name "provider" --folder_path "data/provider" --target_table "public.provider" --pk_field "provider_id"
-        docker-compose run --rm etl_pipeline python src/main.py --source_name "claim" --folder_path "data/claim" --target_table "public.claim" --pk_field "claim_id" --cdc_field "last_modified_date"
-    Accessing the Database
-        docker exec -it enterprise_pg_db psql -U admin -d billing_db
+### Booting the Infrastructure
+First, spin up the PostgreSQL database container in detached mode. This container holds your tables and schemas.
 
-3. Testing
-The pipeline is covered by a comprehensive pytest suite ensuring type safety, chronological logic (CDC time-travel prevention), and infrastructure integrity.
-To execute the test suite inside the containerized environment:
-    docker-compose run --rm etl_pipeline pytest
-
-4. Deployment Strategy
-To deploy this architecture into a production cloud environment (e.g., AWS):
-    Container Registry: CI/CD actions will build and push the etl_pipeline Docker image to Amazon ECR.
-    Database: The local PostgreSQL container will be replaced by an Amazon RDS for PostgreSQL instance.
-    Compute: The Docker run commands will be executed via Amazon ECS (Fargate) or an EKS Kubernetes cluster.    
+```bash
+docker-compose up -d enterprise_pg_db
+Executing the Data Loads
+Run the orchestrator script for patient, provider, and claim.
+docker-compose run --rm etl_pipeline python src/main.py --source_name "patient" --folder_path "data/patient" --target_table "public.patient" --pk_field "patient_id" --cdc_field "last_modified_date"
+docker-compose run --rm etl_pipeline python src/main.py --source_name "provider" --folder_path "data/provider" --target_table "public.provider" --pk_field "provider_id"
+docker-compose run --rm etl_pipeline python src/main.py --source_name "claim" --folder_path "data/claim" --target_table "public.claim" --pk_field "claim_id" --cdc_field "last_modified_date"   
 
 5. Future Development Roadmap
 To scale this pipeline for massive enterprise workloads, the following improvements are prioritized.
