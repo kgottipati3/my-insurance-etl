@@ -20,9 +20,9 @@ This project was engineered with a strict focus on data integrity, decoupled arc
 
 ---
 1. Local Setup & Installation
-Prerequisites
-    Docker Desktop installed and running.
-    Git installed.
+Prerequisites:
+Docker Desktop installed and running.
+Git installed.
 
 Installation
 Clone the repository and build the isolated Docker containers. The docker-compose.yaml file defines both the Python ETL environment and the PostgreSQL database.
