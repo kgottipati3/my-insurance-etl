@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  # ---------------------------------------------------------
+  # 1. The Database Container
+  # ---------------------------------------------------------
+  postgres_db:
+    image: postgres:15-alpine
+    container_name: enterprise_pg_db
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: super_secret_password
+      POSTGRES_DB: billing_db
+    ports:
+      - "5432:5432"
+    volumes:
+      # Automatically run init.sql when the database is created
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      # Persist data even if the container is destroyed
+      - pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d billing_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # ---------------------------------------------------------
+  # 2. The ETL Pipeline Container
+  # ---------------------------------------------------------
+  etl_pipeline:
+    build: .
+    container_name: enterprise_etl_pipeline
+    depends_on:
+      postgres_db:
+        condition: service_healthy  # Wait for the DB to be fully ready before starting
+    env_file:
+      - .env
+    environment:
+      # Override the DB host to point to the docker-compose service name
+      DB_HOST: postgres_db
+    volumes:
+      # Mount the local data folder so the container can read the CSV
+      - ./data:/app/data
+      # OPTIONAL: Uncomment the line below for local development to live-reload code changes
+      - ./src:/app/src
+
+volumes:
+  pg_data:

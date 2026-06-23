@@ -1,0 +1,15 @@
+# 1. Core Infrastructure Layer
+psycopg2-binary>=2.9.9
+
+# 2. Validation & Rules Engine Layer
+pydantic>=2.6.0
+
+# The extension that securely loads environment variables into config.py
+pydantic-settings>=2.2.0
+
+# 3. Testing & Quality Assurance Layer
+
+pytest>=8.0.0
+
+# Complex date string parsing required by Pydantic validators
+python-dateutil>=2.8.2
