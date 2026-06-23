@@ -43,7 +43,12 @@ Run the orchestrator script for patient, provider, and claim.
 docker-compose run --rm etl_pipeline python src/main.py --source_name "patient" --folder_path "data/patient" --target_table "public.patient" --pk_field "patient_id" --cdc_field "last_modified_date"
 docker-compose run --rm etl_pipeline python src/main.py --source_name "provider" --folder_path "data/provider" --target_table "public.provider" --pk_field "provider_id"
 docker-compose run --rm etl_pipeline python src/main.py --source_name "claim" --folder_path "data/claim" --target_table "public.claim" --pk_field "claim_id" --cdc_field "last_modified_date"   
-
+Accessing the Database
+To log into the running Postgres container:
+docker exec -it enterprise_pg_db psql -U admin -d billing_db
+3. Testing
+The pipeline is covered by a comprehensive pytest suite ensuring type safety, chronological logic (CDC time-travel prevention), and infrastructure integrity. To execute the test suite inside the containerized environment:
+docker-compose run --rm etl_pipeline pytest
 5. Future Development Roadmap
 To scale this pipeline for massive enterprise workloads, the following improvements are prioritized.
 
