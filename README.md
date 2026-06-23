@@ -49,6 +49,14 @@ docker exec -it enterprise_pg_db psql -U admin -d billing_db
 3. Testing
 The pipeline is covered by a comprehensive pytest suite ensuring type safety, chronological logic (CDC time-travel prevention), and infrastructure integrity. To execute the test suite inside the containerized environment:
 docker-compose run --rm etl_pipeline pytest
+4. Deployment Strategy
+To deploy this architecture into a production cloud environment (e.g., AWS):
+
+Container Registry: CI/CD actions will build and push the etl_pipeline Docker image to Amazon ECR.
+
+Database: The local PostgreSQL container will be replaced by an Amazon RDS for PostgreSQL instance.
+
+Compute: The Docker run commands will be executed via Amazon ECS (Fargate) or an EKS Kubernetes cluster.
 5. Future Development Roadmap
 To scale this pipeline for massive enterprise workloads, the following improvements are prioritized.
 
