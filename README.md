@@ -49,17 +49,15 @@ docker exec -it enterprise_pg_db psql -U admin -d billing_db
 3. Testing
 The pipeline is covered by a comprehensive pytest suite ensuring type safety, chronological logic (CDC time-travel prevention), and infrastructure integrity. To execute the test suite inside the containerized environment:
 docker-compose run --rm etl_pipeline pytest
+
 4. Deployment Strategy
 To deploy this architecture into a production cloud environment (e.g., AWS):
-
 Container Registry: CI/CD actions will build and push the etl_pipeline Docker image to Amazon ECR.
-
 Database: The local PostgreSQL container will be replaced by an Amazon RDS for PostgreSQL instance.
-
 Compute: The Docker run commands will be executed via Amazon ECS (Fargate) or an EKS Kubernetes cluster.
+
 5. Future Development Roadmap
 To scale this pipeline for massive enterprise workloads, the following improvements are prioritized.
-
 Priority 1: ELT Pattern
 The Challenge: The current in-memory Python Master Data Cache (checking Foreign Keys via set()) is incredibly fast for thousands of rows but will cause Out-Of-Memory (OOM) crashes if scaled to millions of patients.
 The Solution: Transition to an ELT pattern. Python will load raw validated data into temporary staging schemas, and heavy Foreign Key validation will be offloaded to PostgreSQL using LEFT JOIN operations before inserting into public.
